@@ -1,0 +1,13 @@
+package com.logistra.auth.model;
+
+public enum RoleName {
+    ROLE_SUPER_ADMIN,
+    ROLE_ADMIN,
+    ROLE_WAREHOUSE_MANAGER,
+    ROLE_WAREHOUSE_STAFF,
+    ROLE_INVENTORY_MANAGER,
+    ROLE_PROCUREMENT_MANAGER,
+    ROLE_SALES_MANAGER,
+    ROLE_AUDITOR,
+    ROLE_VIEWER
+}
