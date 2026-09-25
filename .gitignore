@@ -52,6 +52,7 @@ dist-ssr/
 .env.development.local
 .env.test.local
 .env.production.local
+.vercel/
 
 # IDEs & Editors
 .idea/
@@ -79,3 +80,6 @@ dist-ssr/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+.vercel
+.env*
