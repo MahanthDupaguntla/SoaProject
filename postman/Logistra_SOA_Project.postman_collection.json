@@ -1,0 +1,627 @@
+{
+  "info": {
+    "name": "Logistra SOA Microservices Collection",
+    "description": "Complete Postman collection for Logistra SOA Microservices (Spring Boot & Spring Cloud Gateway)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Login (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.environment.set(\"bearer_token\", jsonData.token);",
+                  "    console.log(\"Saved bearer_token to environment\");",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"Admin@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login (Warehouse Manager)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"warehouse_mgr\",\n  \"password\": \"Manager@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Register New User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"johndoe\",\n  \"email\": \"john@logistra.io\",\n  \"password\": \"Password@123\",\n  \"fullName\": \"John Doe\",\n  \"roles\": [\"ROLE_WAREHOUSE_STAFF\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Validate Token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/validate?token={{bearer_token}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "validate"],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "{{bearer_token}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"]
+            }
+          }
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Product by SKU",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/sku/ELEC-SRV-01",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "sku", "ELEC-SRV-01"]
+            }
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sku\": \"IND-PMP-99\",\n  \"name\": \"Hydraulic Flow Pump X9\",\n  \"description\": \"Industrial high pressure pump\",\n  \"category\": \"Machinery\",\n  \"brand\": \"HydroTech\",\n  \"unit\": \"UNIT\",\n  \"price\": 1250.00,\n  \"cost\": 800.00,\n  \"barcode\": \"987654321098\",\n  \"quantity\": 25,\n  \"reorderLevel\": 10,\n  \"reorderQuantity\": 20,\n  \"status\": \"ACTIVE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"]
+            }
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Hydraulic Flow Pump X9 (Rev B)\",\n  \"description\": \"Updated high pressure pump\",\n  \"category\": \"Machinery\",\n  \"brand\": \"HydroTech\",\n  \"unit\": \"UNIT\",\n  \"price\": 1350.00,\n  \"cost\": 850.00,\n  \"quantity\": 30,\n  \"reorderLevel\": 10,\n  \"reorderQuantity\": 20,\n  \"status\": \"ACTIVE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "10"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Warehouses & Inventory",
+      "item": [
+        {
+          "name": "Get All Warehouses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/warehouses",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", "warehouses"]
+            }
+          }
+        },
+        {
+          "name": "Create Warehouse",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"WH-BER-04\",\n  \"name\": \"Berlin Distribution Center\",\n  \"location\": \"Berlin, Germany\",\n  \"capacity\": 60000,\n  \"managerName\": \"Markus Weber\",\n  \"status\": \"ACTIVE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/warehouses",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", "warehouses"]
+            }
+          }
+        },
+        {
+          "name": "Get All Inventory Stock",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/items",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", "items"]
+            }
+          }
+        },
+        {
+          "name": "Get Inventory by Warehouse ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/items/warehouse/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", "items", "warehouse", "1"]
+            }
+          }
+        },
+        {
+          "name": "Adjust Stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": 1,\n  \"warehouseId\": 1,\n  \"newQuantity\": 150,\n  \"reason\": \"Cycle count calibration\",\n  \"performedBy\": \"admin\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/adjust",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", "adjust"]
+            }
+          }
+        },
+        {
+          "name": "Get Stock Movements (Audit Trail)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/movements",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", "movements"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Transfers & Reconciliations",
+      "item": [
+        {
+          "name": "Get Transfers",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/transfers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", "transfers"]
+            }
+          }
+        },
+        {
+          "name": "Create Transfer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sourceWarehouseId\": 1,\n  \"destinationWarehouseId\": 2,\n  \"productId\": 1,\n  \"quantity\": 10,\n  \"requestedBy\": \"admin\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/transfers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", "transfers"]
+            }
+          }
+        },
+        {
+          "name": "Update Transfer Status (Approve/Dispatch/Receive)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/transfers/1/status?status=APPROVED&user=admin",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", "transfers", "1", "status"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "APPROVED"
+                },
+                {
+                  "key": "user",
+                  "value": "admin"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Reconciliations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/reconciliations",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", "reconciliations"]
+            }
+          }
+        },
+        {
+          "name": "Create Reconciliation Count",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"warehouseId\": 1,\n  \"productId\": 1,\n  \"systemQuantity\": 150,\n  \"physicalQuantity\": 148,\n  \"countedBy\": \"warehouse_mgr\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/reconciliations",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", "reconciliations"]
+            }
+          }
+        },
+        {
+          "name": "Review Reconciliation",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/reconciliations/1/review?reviewer=admin&notes=ApprovedAuditVariance",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", "reconciliations", "1", "review"],
+              "query": [
+                {
+                  "key": "reviewer",
+                  "value": "admin"
+                },
+                {
+                  "key": "notes",
+                  "value": "ApprovedAuditVariance"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Approve Reconciliation (Auto-Adjust Stock)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/reconciliations/1/approve?approver=admin",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", "reconciliations", "1", "approve"],
+              "query": [
+                {
+                  "key": "approver",
+                  "value": "admin"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Orders (SAGA Pattern)",
+      "item": [
+        {
+          "name": "Get All Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders"]
+            }
+          }
+        },
+        {
+          "name": "Place Order (SAGA Auto-Reservation)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Acme Global Corp\",\n  \"customerEmail\": \"procurement@acme.com\",\n  \"warehouseId\": 1,\n  \"items\": [\n    {\n      \"productId\": 1,\n      \"productName\": \"Enterprise Server Rack Unit\",\n      \"quantity\": 2,\n      \"unitPrice\": 1899.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders"]
+            }
+          }
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/1/status?status=SHIPPED",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "1", "status"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "SHIPPED"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Discovery & Gateway Actuator",
+      "item": [
+        {
+          "name": "Gateway Health",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/actuator/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["actuator", "health"]
+            }
+          }
+        },
+        {
+          "name": "Eureka Dashboard / Apps",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8761/eureka/apps",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8761",
+              "path": ["eureka", "apps"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
